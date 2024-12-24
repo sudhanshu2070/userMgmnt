@@ -14,7 +14,16 @@ export default function App() {
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
         <NavigationContainer>
-          <Stack.Navigator initialRouteName="Home">
+          <Stack.Navigator initialRouteName="Home"
+          screenOptions={{
+            headerStyle: { backgroundColor: '#ffffff'}, 
+            headerTintColor: '#212121', 
+            headerTitleStyle: {
+              fontFamily: 'lucida grande', 
+              fontWeight: 'condensedBold'
+            },
+          }}
+          >
             <Stack.Screen name="Home" component={HomeScreen} />
             <Stack.Screen name="Form" component={FormScreen} />
           </Stack.Navigator>

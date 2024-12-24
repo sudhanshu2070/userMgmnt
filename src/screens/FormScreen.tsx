@@ -53,7 +53,7 @@ const FormScreen: React.FC<FormScreenProps> = ({ navigation, route }) => {
     if (!validateFields()) return;
 
     if (user) {
-      // Updating existing user
+      // Updating the existing user
       dispatch(updateUser({ id: user.id, name, email, dob, phone }));
       Alert.alert('Success', 'User updated successfully.');
     } else {
@@ -72,9 +72,9 @@ const FormScreen: React.FC<FormScreenProps> = ({ navigation, route }) => {
   };
 
   const handleDateChange = (event: any, selectedDate: Date | undefined) => {
-    setShowDatePicker(false); // Close the picker
+    setShowDatePicker(false); // Closing the picker
     if (selectedDate) {
-      const formattedDate = selectedDate.toISOString().split('T')[0]; // Format to "YYYY-MM-DD"
+      const formattedDate = selectedDate.toISOString().split('T')[0]; // Formatting to "YYYY-MM-DD"
       setDob(formattedDate);
     }
   };
@@ -101,7 +101,7 @@ const FormScreen: React.FC<FormScreenProps> = ({ navigation, route }) => {
         style={styles.input}
         value={dob}
         placeholder="YYYY-MM-DD"
-        onFocus={() => setShowDatePicker(true)} // Show picker when input is focused
+        onFocus={() => setShowDatePicker(true)} // Showing the date picker when input is focused
       />
 
       {showDatePicker && (
@@ -124,7 +124,7 @@ const FormScreen: React.FC<FormScreenProps> = ({ navigation, route }) => {
       <Button
         title={user ? 'Update' : 'Add'}
         onPress={handleSubmit}
-        color="#007BFF"
+        color="#219897"
       />
     </View>
   );

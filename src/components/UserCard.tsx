@@ -28,7 +28,7 @@ const UserCard: React.FC<UserCardProps> = ({ user, onEdit, onDelete }) => {
 
       <View style={styles.actions}>
         <View style={styles.buttonContainer}>
-          <Button title="Edit" onPress={onEdit} color="#007BFF" />
+          <Button title="Update" onPress={onEdit} color="#007BFF" />
         </View>
         <View style={styles.buttonContainer}>
           <Button title="Delete" onPress={onDelete} color="#FF3B30" />
