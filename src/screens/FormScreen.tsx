@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addUser, updateUser } from '../redux/userSlice';
 import { RootState } from '../redux/store';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { isValidEmail, isValidPhone } from '../utils/validation';
 
 type FormScreenProps = NativeStackScreenProps<any, 'Form'>;
 
@@ -34,13 +35,12 @@ const FormScreen: React.FC<FormScreenProps> = ({ navigation, route }) => {
       Alert.alert('Validation Error', 'All fields are required.');
       return false;
     }
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
+    
+    if (!isValidEmail(email)) {
       Alert.alert('Validation Error', 'Please enter a valid email address.');
       return false;
     }
-    const phoneRegex = /^[0-9]{10}$/;
-    if (!phoneRegex.test(phone)) {
+    if (!isValidPhone(phone)) {
       Alert.alert('Validation Error', 'Phone number must be 10 digits.');
       return false;
     }
@@ -51,7 +51,7 @@ const FormScreen: React.FC<FormScreenProps> = ({ navigation, route }) => {
     if (!validateFields()) return;
 
     if (user) {
-      // Update existing user
+      // Updating existing user
       dispatch(updateUser({ id: user.id, name, email, dob, phone }));
       Alert.alert('Success', 'User updated successfully.');
     } else {
