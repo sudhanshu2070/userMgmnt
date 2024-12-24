@@ -17,7 +17,7 @@
             renderItem={({ item }) => (
             <UserCard
                 user={item}
-                onEdit={() => navigation.navigate('Form', { userId: item.id })}  /* Pass userId instead of the entire user object */
+                onEdit={() => navigation.navigate('Form', { userId: item.id })}  /* Passing userId*/
                 onDelete={() => dispatch(deleteUser(item.id))}
                 />
             )}

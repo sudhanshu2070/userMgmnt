@@ -55,7 +55,7 @@ const FormScreen: React.FC<FormScreenProps> = ({ navigation, route }) => {
       dispatch(updateUser({ id: user.id, name, email, dob, phone }));
       Alert.alert('Success', 'User updated successfully.');
     } else {
-      // Add new user
+      // Adding new user
       const newUser = {
         id: Date.now().toString(),
         name,
