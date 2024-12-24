@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Alert } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, Alert, Platform } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { addUser, updateUser } from '../redux/userSlice';
 import { RootState } from '../redux/store';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { isValidEmail, isValidPhone } from '../utils/validation';
+import DateTimePicker from '@react-native-community/datetimepicker'; 
 
 type FormScreenProps = NativeStackScreenProps<any, 'Form'>;
 
@@ -20,6 +21,7 @@ const FormScreen: React.FC<FormScreenProps> = ({ navigation, route }) => {
   const [email, setEmail] = useState('');
   const [dob, setDob] = useState('');
   const [phone, setPhone] = useState('');
+  const [showDatePicker, setShowDatePicker] = useState(false);
 
   useEffect(() => {
     if (user) {
@@ -69,6 +71,14 @@ const FormScreen: React.FC<FormScreenProps> = ({ navigation, route }) => {
     navigation.goBack();
   };
 
+  const handleDateChange = (event: any, selectedDate: Date | undefined) => {
+    setShowDatePicker(false); // Close the picker
+    if (selectedDate) {
+      const formattedDate = selectedDate.toISOString().split('T')[0]; // Format to "YYYY-MM-DD"
+      setDob(formattedDate);
+    }
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.label}>Name</Text>
@@ -90,9 +100,19 @@ const FormScreen: React.FC<FormScreenProps> = ({ navigation, route }) => {
       <TextInput
         style={styles.input}
         value={dob}
-        onChangeText={setDob}
         placeholder="YYYY-MM-DD"
+        onFocus={() => setShowDatePicker(true)} // Show picker when input is focused
       />
+
+      {showDatePicker && (
+        <DateTimePicker
+          value={dob ? new Date(dob) : new Date()}
+          mode="date"
+          display={Platform.OS === 'ios' ? 'spinner' : 'calendar'}
+          onChange={handleDateChange}
+        />
+      )}
+
       <Text style={styles.label}>Phone Number</Text>
       <TextInput
         style={styles.input}
