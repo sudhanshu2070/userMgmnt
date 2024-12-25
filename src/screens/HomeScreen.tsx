@@ -13,7 +13,7 @@ const HomeScreen: React.FC = ({ navigation }: any) => {
     
     const [searchQuery, setSearchQuery] = useState('');
     const [sortVisible, setSortVisible] = useState(false);
-    const [sortOption, setSortOption] = useState<string>(''); // tracking the selected sort option
+    const [sortOption, setSortOption] = useState<string>(''); 
 
     const dispatch = useDispatch();
     const users = useSelector((state: RootState) => state.user.users);
