@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addUser, updateUser } from '../redux/userSlice';
 import { RootState } from '../redux/store';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { isValidEmail, isValidPhone } from '../utils/validation';
+import { isValidDOB, isValidEmail, isValidPhone } from '../utils/validation';
 import DateTimePicker from '@react-native-community/datetimepicker'; 
 
 type FormScreenProps = NativeStackScreenProps<any, 'Form'>;
@@ -42,6 +42,12 @@ const FormScreen: React.FC<FormScreenProps> = ({ navigation, route }) => {
       Alert.alert('Validation Error', 'Please enter a valid email address.');
       return false;
     }
+
+    if(!isValidDOB(dob)){
+      Alert.alert('Validation Error', 'Please select a valid D.O.B');
+      return false;
+    }
+
     if (!isValidPhone(phone)) {
       Alert.alert('Validation Error', 'Phone number must be 10 digits.');
       return false;

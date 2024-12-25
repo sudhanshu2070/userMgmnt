@@ -48,7 +48,7 @@ const HomeScreen: React.FC = ({ navigation }: any) => {
         }
 
         dispatch(setSortedUsers(sortedUsers));
-        setSortVisible(false); // Close the sort popup
+        setSortVisible(false); // Closing the sort popup
     };  
 
     // For search icon at the top(in the title bar)  
@@ -67,8 +67,11 @@ const HomeScreen: React.FC = ({ navigation }: any) => {
 
     return (
         <View style={styles.container}>
+           
+        {/* Searching and Sorting Containers */}
+        <View style={styles.headerContainer}>
             <View style={styles.searchContainer}>
-                <Ionicons name="search" size={20} color="#757575" style={styles.icon} />
+              <Ionicons name="search" size={20} color="#757575" style={styles.icon} />
                 <TextInput
                     style={styles.searchInput}
                     placeholder="Search by name or email"
@@ -76,11 +79,15 @@ const HomeScreen: React.FC = ({ navigation }: any) => {
                     value={searchQuery}
                     onChangeText={setSearchQuery}
                 />
-                {/* Sort Button */}
-                <TouchableOpacity onPress={() => setSortVisible(true)}>
-                    <Ionicons name="filter" size={20} color="#757575" style={styles.icon} />
-                </TouchableOpacity>
             </View>
+            <TouchableOpacity
+                style={styles.sortButtonContainer}
+                onPress={() => setSortVisible(true)}
+            >
+                <Text style={styles.sortPlaceholder}>Sort</Text>
+                <Ionicons name="filter" size={20} color="#757575" style={styles.icon} />
+            </TouchableOpacity>
+      </View>
 
         <FlatList
             data={filteredUsers}
@@ -94,7 +101,7 @@ const HomeScreen: React.FC = ({ navigation }: any) => {
             )}
         />
 
-             {/* Sort Modal */}
+        {/* Sorting Slide Modal */}
         <Modal visible={sortVisible} transparent animationType="slide">
             <TouchableOpacity style={styles.modalOverlay} onPress={() => setSortVisible(false)}>
                 <View style={styles.modalContent}>
@@ -115,6 +122,8 @@ const HomeScreen: React.FC = ({ navigation }: any) => {
         </TouchableOpacity>
       </Modal>
 
+        {/* Divider */}
+        <View style={styles.divider} />
             <TouchableOpacity
                 style={styles.addButton}
                 onPress={() => navigation.navigate('Form')}
@@ -133,6 +142,7 @@ const HomeScreen: React.FC = ({ navigation }: any) => {
         backgroundColor:'#ffffff',
     },
     searchContainer: {
+        flex: 1,
         flexDirection: 'row',
         alignItems: 'center',
         backgroundColor: '#F5F5F5', 
@@ -140,13 +150,15 @@ const HomeScreen: React.FC = ({ navigation }: any) => {
         paddingHorizontal: 10,
         paddingVertical: 1.5,
         marginVertical: 10,
+        marginRight:5,
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 1 },
         shadowOpacity: 0.2,
         shadowRadius: 1.5, 
         elevation: 2, 
-        width: '95%', // (95% of the container)
-        alignSelf: 'center', 
+        width: '70%', 
+        // alignSelf: 'center', 
+        height:45,
       },
     icon: {
         marginRight: 8,
@@ -201,7 +213,40 @@ const HomeScreen: React.FC = ({ navigation }: any) => {
         paddingVertical: 10,
         borderBottomWidth: 1,
         borderBottomColor: '#ddd',
-      },    
+      },  
+      sortPlaceholder: {
+        fontSize: 16,
+        color: '#757575', 
+        marginRight: 5, 
+      },
+      headerContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginBottom: 10,
+      },
+      sortButtonContainer: {
+        width:'17%',
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: '#F5F5F5',
+        borderRadius: 25,
+        paddingHorizontal: 10,
+        paddingVertical: 1.5,
+        borderWidth: 1,
+        borderColor: '#E0E0E0',
+        height: 45,
+        marginVertical: 10,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.2,
+        shadowRadius: 1.5, 
+        elevation: 2, 
+      },
+      divider: {
+        height: 1.5,
+        backgroundColor: '#E0E0E0', 
+        marginVertical: 7, 
+    },
     });
 
     export default HomeScreen;
