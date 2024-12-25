@@ -1,25 +1,55 @@
     import React, { useState } from 'react';
-    import { FlatList, View, Button, StyleSheet, TextInput, TouchableOpacity, Text } from 'react-native';
+    import { FlatList, View, Button, StyleSheet, TextInput, TouchableOpacity, Text, Modal } from 'react-native';
     import UserCard from '../components/UserCard';
     import { useSelector, useDispatch } from 'react-redux';
     import { RootState } from '../redux/store';
     import { deleteUser } from '../redux/userSlice';
+    import { setSortedUsers } from '../redux/userSlice'; // Import the action
     import { IconButton } from 'react-native-paper';
     import Ionicons from 'react-native-vector-icons/Ionicons';
     import Icon from 'react-native-vector-icons/MaterialIcons';
 
-    const HomeScreen: React.FC = ({ navigation }: any) => {
+const HomeScreen: React.FC = ({ navigation }: any) => {
     
     const [searchQuery, setSearchQuery] = useState('');
+    const [sortVisible, setSortVisible] = useState(false);
+    const [sortOption, setSortOption] = useState<string>(''); // tracking the selected sort option
 
-    const users = useSelector((state: RootState) => state.user.users);
     const dispatch = useDispatch();
+    const users = useSelector((state: RootState) => state.user.users);
 
     const filteredUsers = users.filter(
         (user) =>
           user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
           user.email.toLowerCase().includes(searchQuery.toLowerCase())
       );
+
+
+    // Sort the filtered users based on selected option
+    const sortUsers = (option: string) => {
+        setSortOption(option);
+        const sortedUsers = [...filteredUsers];
+
+        switch (option) {
+            case 'Name (Ascending)':
+                sortedUsers.sort((a, b) => a.name.localeCompare(b.name));
+                break;
+            case 'Name (Descending)':
+                sortedUsers.sort((a, b) => b.name.localeCompare(a.name));
+                break;
+            case 'DOB (Youngest)':
+                sortedUsers.sort((a, b) => new Date(b.dob).getTime() - new Date(a.dob).getTime());
+                break;
+            case 'DOB (Oldest)':
+                sortedUsers.sort((a, b) => new Date(a.dob).getTime() - new Date(b.dob).getTime());
+                break;
+            default:
+                break;
+        }
+
+        dispatch(setSortedUsers(sortedUsers));
+        setSortVisible(false); // Close the sort popup
+    };  
 
     // For search icon at the top(in the title bar)  
 
@@ -46,6 +76,10 @@
                     value={searchQuery}
                     onChangeText={setSearchQuery}
                 />
+                {/* Sort Button */}
+                <TouchableOpacity onPress={() => setSortVisible(true)}>
+                    <Ionicons name="filter" size={20} color="#757575" style={styles.icon} />
+                </TouchableOpacity>
             </View>
 
         <FlatList
@@ -59,6 +93,28 @@
                 />
             )}
         />
+
+             {/* Sort Modal */}
+        <Modal visible={sortVisible} transparent animationType="slide">
+            <TouchableOpacity style={styles.modalOverlay} onPress={() => setSortVisible(false)}>
+                <View style={styles.modalContent}>
+                <Text style={styles.modalTitle}>Sort by:</Text>
+            <TouchableOpacity onPress={() => sortUsers('Name (Ascending)')}>
+                <Text style={styles.modalOption}>Name (Ascending)</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => sortUsers('Name (Descending)')}>
+                <Text style={styles.modalOption}>Name (Descending)</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => sortUsers('DOB (Youngest)')}>
+                <Text style={styles.modalOption}>DOB (Youngest)</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => sortUsers('DOB (Oldest)')}>
+                <Text style={styles.modalOption}>DOB (Oldest)</Text>
+            </TouchableOpacity>
+          </View>
+        </TouchableOpacity>
+      </Modal>
+
             <TouchableOpacity
                 style={styles.addButton}
                 onPress={() => navigation.navigate('Form')}
@@ -123,6 +179,28 @@
         fontSize: 16,
         fontWeight: '600',
         marginLeft: 8, 
+      },
+      modalOverlay: {
+        flex: 1,
+        justifyContent: 'flex-end',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+      },
+      modalContent: {
+        backgroundColor: '#fff',
+        padding: 20,
+        borderTopLeftRadius: 20,
+        borderTopRightRadius: 20,
+      },
+      modalTitle: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        marginBottom: 10,
+      },
+      modalOption: {
+        fontSize: 16,
+        paddingVertical: 10,
+        borderBottomWidth: 1,
+        borderBottomColor: '#ddd',
       },    
     });
 

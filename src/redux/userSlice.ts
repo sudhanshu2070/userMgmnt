@@ -30,8 +30,11 @@ const userSlice = createSlice({
     deleteUser: (state, action: PayloadAction<string>) => {
       state.users = state.users.filter(user => user.id !== action.payload);
     },
+    setSortedUsers: (state, action: PayloadAction<User[]>) => {
+      state.users = action.payload; // Updating users with the sorted array
+    },
   },
 });
 
-export const { addUser, updateUser, deleteUser } = userSlice.actions;
+export const { addUser, updateUser, deleteUser, setSortedUsers } = userSlice.actions;
 export default userSlice.reducer;
